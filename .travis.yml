@@ -11,6 +11,7 @@ compiler: gcc
 env:
   global:
   - PACKAGE=cups
+  - PACKAGE2=cups-bjnp
   - USER=arition
   - REPO=openwrt-cups
   - DEPLOYREPO=openwrt-repo
@@ -28,9 +29,11 @@ install:
 - if [ "$OSVER" = "OpenWrt_15.05" ]; then tar xjf $FILE && SDK_DIR="OpenWrt-SDK-*"; elif [ "$OSVER" = "LEDE_17.01" ]; then tar Jxf $FILE && SDK_DIR="lede-sdk-*"; fi
 - cd $TRAVIS_BUILD_DIR/sdk/$SDK_DIR
 - mkdir package/$PACKAGE
-- ln -s $TRAVIS_BUILD_DIR/cups/Makefile package/$PACKAGE/
-- ln -s $TRAVIS_BUILD_DIR/cups/files package/$PACKAGE/
-- ln -s $TRAVIS_BUILD_DIR/cups/patches package/$PACKAGE/
+- ln -s $TRAVIS_BUILD_DIR/$PACKAGE/Makefile package/$PACKAGE/
+- ln -s $TRAVIS_BUILD_DIR/$PACKAGE/files package/$PACKAGE/
+- ln -s $TRAVIS_BUILD_DIR/$PACKAGE/patches package/$PACKAGE/
+- mkdir package/$PACKAGE2
+- ln -s $TRAVIS_BUILD_DIR/$PACKAGE2/Makefile package/$PACKAGE2/
 script:
 - export PATH=$TRAVIS_BUILD_DIR/local/usr/bin:$PATH
 - cd $TRAVIS_BUILD_DIR/sdk/$SDK_DIR
@@ -41,8 +44,14 @@ script:
 - export PATH=$TRAVIS_BUILD_DIR/sdk/$SDK_DIR/staging_dir/$TOOLCHAIN_DIR/bin:$PATH
 - popd
 - ./scripts/feeds update packages >/dev/null
+- ./scripts/feeds update base >/dev/null
+- ./scripts/feeds install libjpeg
+- ./scripts/feeds install libpng
+- ./scripts/feeds install zlib
+- ./scripts/feeds install libusb-1.0
 - make defconfig
-- make package/cups/compile V=s
+- make package/$PACKAGE/compile V=s
+- make package/$PACKAGE2/compile V=s
 - find $TRAVIS_BUILD_DIR/sdk/$SDK_DIR/bin/
 - find . -name *cups*.ipk -exec cp {} $TRAVIS_BUILD_DIR \;
 - cd $TRAVIS_BUILD_DIR/
