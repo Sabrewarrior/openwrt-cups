@@ -13,7 +13,7 @@ PKG_VERSION:=2.2.8
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-source.tar.gz
-PKG_SOURCE_URL:=https://github.com/apple/cups/releases/download/v$(PKG_VERSION)/ 
+PKG_SOURCE_URL:=https://github.com/apple/cups/releases/download/v$(PKG_VERSION)
 PKG_MD5SUM:=33150d08993a04c8e22176e93805a051
 
 TARGET_LDFLAGS+=-Wl,-rpath-link=$(STAGING_DIR)/usr/lib
@@ -250,7 +250,7 @@ endef
 define Package/cups-client/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) \
-		$(PKG_INSTALL_DIR)/usr/bin/{lp,cancel,cupstestppd,cupstestdsc} \
+		$(PKG_INSTALL_DIR)/usr/bin/{lp,cancel,cupstestppd,cupstestdsc,cups-config} \
 		$(PKG_INSTALL_DIR)/usr/bin/{ipptool,lpoptions,lpstat} \
 		$(1)/usr/bin/
 	$(INSTALL_DIR) $(1)/usr/sbin
@@ -259,6 +259,9 @@ define Package/cups-client/install
 		$(PKG_INSTALL_DIR)/usr/sbin/{lpadmin,lpinfo,lpmove} \
 		$(1)/usr/sbin/
 	(cd $(1)/usr/sbin; ln -sf cupsaccept accept; ln -sf cupsaccept cupsenable; ln -sf cupsaccept cupsdisable; ln -sf cupsaccept reject; ln -sf cupsaccept cupsreject;)
+	$(INSTALL_DIR) $(1)/usr/share/cups/ipptool
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/cups/ipptool/* \
+	$(1)/usr/share/cups/ipptool/
 endef
 
 define Package/cups-filters/install
