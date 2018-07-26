@@ -1,0 +1,52 @@
+dist: trusty
+sudo: false
+cache:
+  bundler: true
+  directories:
+  - cache/
+notifications:
+  email: false
+language: c
+compiler: gcc
+env:
+  global:
+  - PACKAGE=cups
+  - USER=arition
+  - REPO=openwrt-cups
+  - DEPLOYREPO=openwrt-repo
+  matrix:
+  - OSVER=LEDE_17.01      SDK_URL=https://downloads.lede-project.org/releases/17.01.4/targets/ipq806x/generic/lede-sdk-17.01.4-ipq806x_gcc-5.4.0_musl-1.1.16_eabi.Linux-x86_64.tar.xz
+install:
+- mkdir -p $TRAVIS_BUILD_DIR/local ; cd $TRAVIS_BUILD_DIR/local
+- wget "http://archive.ubuntu.com/ubuntu/pool/main/c/ccache/ccache_3.3.4-1_amd64.deb"
+- dpkg -x *.deb .
+- mkdir -p $TRAVIS_BUILD_DIR/cache ; cd $TRAVIS_BUILD_DIR/cache
+- wget -c $SDK_URL
+- mkdir -p $TRAVIS_BUILD_DIR/sdk ; cd $TRAVIS_BUILD_DIR/sdk
+- export FILE=$TRAVIS_BUILD_DIR/cache/$(basename $SDK_URL)
+- file $FILE
+- if [ "$OSVER" = "OpenWrt_15.05" ]; then tar xjf $FILE && SDK_DIR="OpenWrt-SDK-*"; elif [ "$OSVER" = "LEDE_17.01" ]; then tar Jxf $FILE && SDK_DIR="lede-sdk-*"; fi
+- cd $TRAVIS_BUILD_DIR/sdk/$SDK_DIR
+- mkdir package/$PACKAGE
+- ln -s $TRAVIS_BUILD_DIR/cups/Makefile package/$PACKAGE/
+- ln -s $TRAVIS_BUILD_DIR/cups/files package/$PACKAGE/
+- ln -s $TRAVIS_BUILD_DIR/cups/patches package/$PACKAGE/
+script:
+- export PATH=$TRAVIS_BUILD_DIR/local/usr/bin:$PATH
+- cd $TRAVIS_BUILD_DIR/sdk/$SDK_DIR
+- export SDK_DIR=$(basename `pwd`)
+- export PATH=$TRAVIS_BUILD_DIR/sdk/$SDK_DIR/staging_dir/host/bin:$PATH
+- pushd staging_dir/toolchain-*
+- TOOLCHAIN_DIR=$(basename `pwd`)
+- export PATH=$TRAVIS_BUILD_DIR/sdk/$SDK_DIR/staging_dir/$TOOLCHAIN_DIR/bin:$PATH
+- popd
+- ./scripts/feeds update packages >/dev/null
+- make defconfig
+- make package/cups/compile V=s
+- find $TRAVIS_BUILD_DIR/sdk/$SDK_DIR/bin/
+- find . -name *cups*.ipk -exec cp {} $TRAVIS_BUILD_DIR \;
+- cd $TRAVIS_BUILD_DIR/
+- chmod a+x $TRAVIS_BUILD_DIR/deploy.sh
+after_success: "$TRAVIS_BUILD_DIR/deploy.sh"
+before_install:
+- echo $enc_key | gpg --passphrase-fd 0 secret.key.gpg
