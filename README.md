@@ -1,17 +1,10 @@
-# lede-cups
+# openwrt-cups
 
-git clone https://github.com/lede-project/source
+CUPS for openwrt
 
-cd source
+Travis CI: [![Build Status](https://travis-ci.org/arition/openwrt-cups.svg?branch=master)](https://travis-ci.org/arition/openwrt-cups)
 
-echo "src-git cups https://github.com/Gr4ffy/lede-cups.git" >> feeds.conf.default
+## Pre-compiled ipk
 
-./scripts/feeds update -a
-
-./scripts/feeds install -a
-
-make menuconfig (set Network->Printing->cups as "M")
-
-make
-
-copy /source/bin/packages/<arch>/cups/*.ipk to machine & opkg install 
+Your can find pre-compiled ipk:
+https://github.com/arition/openwrt-repo
