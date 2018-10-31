@@ -43,10 +43,6 @@ define Build/Configure
 	)
 endef
 
-define Build/Install
-	$(call Build/Install/Default,install-cups)
-endef
-
 define Package/foomatic-filters/install
 	$(INSTALL_DIR) $(1)/usr/lib/cups/filter
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/cups/filter/foomatic-rip $(1)/usr/lib/cups/filter/
