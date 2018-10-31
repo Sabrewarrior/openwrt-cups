@@ -41,7 +41,7 @@ define Build/Prepare
 	tar -zxf $(DL_DIR)/$(PKG_SOURCE) -C $(PKG_BUILD_DIR)
 	cp -r $(PKG_BUILD_DIR)/foomatic-filters*/* $(PKG_BUILD_DIR)
 	rm -rf $(PKG_BUILD_DIR)/foomatic-filters*
-	$(PKG_BUILD_DIR)/make_configure
+	cd $(PKG_BUILD_DIR) && ./make_configure
 endef
 
 define Build/Configure
