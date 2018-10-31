@@ -34,10 +34,18 @@ PostScript data into the printer's native format using a
 printer/driver specific, but spooler-independent PPD file.
 endef
 
-define Build/Configure
+define Build/Prepare
+	echo $(DL_DIR) > /home/joshiu/Documents/dldir.txt
+	echo $(PKG_BUILD_DIR) >> /home/joshiu/Documents/dldir.txt
+	mkdir -p $(PKG_BUILD_DIR)
+	tar -zxf $(DL_DIR)/$(PKG_SOURCE) -C $(PKG_BUILD_DIR)
+	cp -r $(PKG_BUILD_DIR)/foomatic-filters*/* $(PKG_BUILD_DIR)
+	rm -rf $(PKG_BUILD_DIR)/foomatic-filters*
 	$(PKG_BUILD_DIR)/make_configure
+endef
+
+define Build/Configure
 	$(call Build/Configure/Default, \
-		cups \
 		--disable-dbus \
 		UNAME="Linux" \
 		LIBS="-Wl,-rpath-link=$(STAGING_DIR)/usr/lib" \
