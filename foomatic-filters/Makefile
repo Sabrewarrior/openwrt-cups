@@ -7,7 +7,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=foomatic-filters
+PKG_NAME:=distrotech-foomatic-filters
 PKG_VERSION:=4.0.17
 PKG_RELEASE:=1
 
@@ -19,7 +19,7 @@ PKG_BUILD_DEPENDS:=cups
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/foomatic-filters
+define Package/distrotech-foomatic-filters
   SECTION:=net
   CATEGORY:=Network
   TITLE:=Foomatic filters for CUPS
@@ -28,7 +28,7 @@ define Package/foomatic-filters
   SUBMENU:=Printing
 endef
 
-define Package/foomatic-filters/description
+define Package/distrotech-foomatic-filters/description
 Filter scripts used by the printer spoolers to convert the incoming
 PostScript data into the printer's native format using a
 printer/driver specific, but spooler-independent PPD file.
@@ -44,7 +44,7 @@ define Build/Configure
 	)
 endef
 
-define Package/foomatic-filters/install
+define Package/distrotech-foomatic-filters/install
 	$(INSTALL_DIR) $(1)/usr/lib/cups/filter
 	$(INSTALL_BIN) $(PKG_INSTALL_DIR)/usr/lib/cups/filter/foomatic-rip $(1)/usr/lib/cups/filter/
 	$(INSTALL_DIR) $(1)/usr/lib/cups/backend
@@ -52,4 +52,4 @@ define Package/foomatic-filters/install
 endef
 
 
-$(eval $(call BuildPackage,foomatic-filters))
+$(eval $(call BuildPackage,distrotech-foomatic-filters))
