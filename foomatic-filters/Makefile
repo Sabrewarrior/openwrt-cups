@@ -35,7 +35,7 @@ printer/driver specific, but spooler-independent PPD file.
 endef
 
 define Build/Configure
-	make_configure
+	$(PKG_BUILD_DIR)/make_configure
 	$(call Build/Configure/Default, \
 		cups \
 		--disable-dbus \
