@@ -11,7 +11,7 @@ PKG_NAME:=distrotech-foomatic-filters
 PKG_VERSION:=4.0.17
 PKG_RELEASE:=1
 
-PKG_SOURCE:=distrotech-$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://github.com/Distrotech/foomatic-filters/archive
 PKG_MD5SUM:=1feef3c5d09cbccbee9bb313924ef564
 
